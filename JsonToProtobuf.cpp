@@ -9,6 +9,7 @@
 using google::protobuf::util::JsonParseOptions;
 using std::cout;
 using std::endl;
+using std::exception;
 using std::string;
 
 using namespace google::protobuf;
@@ -30,20 +31,25 @@ bool JsonToProtobuf::convert_json_to_protobuf(const string &json_file_name,
 
   bool status{true};
 
-  ptree root;
-  read_json(json_file_name, root);
+  try {
+    ptree root;
+    read_json(json_file_name, root);
 
-  JsonParseOptions options;
+    JsonParseOptions options;
 
-  // get data_link protobuf values from json
-  auto data_link_ptree = root.get_child(object_name);
+    // get data_link protobuf values from json
+    auto data_link_ptree = root.get_child(object_name);
 
-  std::ostringstream data_link_oss;
-  write_json(data_link_oss, data_link_ptree);
-  string json_string = data_link_oss.str();
+    std::ostringstream data_link_oss;
+    write_json(data_link_oss, data_link_ptree);
+    string json_string = data_link_oss.str();
 
-  JsonStringToMessage(json_string, &proto_msg, options);
-
+    JsonStringToMessage(json_string, &proto_msg, options);
+  } catch (exception &ex) {
+    cout << "failed convert json file " << json_file_name << " using "
+         << object_name << " " << __FUNCTION__ << endl;
+    status = false;
+  }
   return status;
 }
 
@@ -53,22 +59,24 @@ bool JsonToProtobuf::convert_protobuf_to_json(const Message &proto_msg,
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
   bool status{true};
+  std::ofstream json_file_handler;
 
-  // Create a json_string from sr.
-  MessageToJsonString(proto_msg, &json_string, m_options);
+  try {
+    // Create a json_string from sr.
+    MessageToJsonString(proto_msg, &json_string, m_options);
 
-  if (output_file_name != "") {
-    std::ofstream json_file_handler;
     json_file_handler.open(output_file_name,
                            std::ofstream::out | std::ofstream::trunc);
     json_file_handler << json_string;
-    cout << "writing file: " << output_file_name << endl;
 
-    json_file_handler.close();
+    cout << "writing file: " << output_file_name << endl;
+  } catch (exception &ex) {
+    cout << __FUNCTION__ << " failed! Exception = " << ex.what() << endl;
+    status = false;
   }
 
+  json_file_handler.close();
   return status;
 }
-
 
 } // namespace Thorup
