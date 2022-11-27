@@ -1,10 +1,10 @@
-#include <iostream>
-
-#include "JsonToProtobuf.h"
+#include "jsontoprotobuf.h"
 
 #include <boost/json.hpp>
 #include <boost/property_tree/json_parser.hpp>
 #include <boost/property_tree/ptree.hpp>
+
+#include <iostream>
 
 using google::protobuf::util::JsonParseOptions;
 using std::cout;
@@ -16,15 +16,15 @@ using namespace google::protobuf;
 using namespace boost::property_tree;
 using namespace boost::property_tree::json_parser;
 
-namespace Thorup {
+namespace thorup {
 
-JsonToProtobuf::JsonToProtobuf() {
+jsontoprotobuf::jsontoprotobuf() {
   m_options.add_whitespace = true;
   m_options.always_print_primitive_fields = true;
   m_options.preserve_proto_field_names = true;
 }
 
-bool JsonToProtobuf::convert_json_to_protobuf(const string &json_file_name,
+bool jsontoprotobuf::convert_json_to_protobuf(const string &json_file_name,
                                               const string &object_name,
                                               Message &proto_msg) {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
@@ -53,7 +53,7 @@ bool JsonToProtobuf::convert_json_to_protobuf(const string &json_file_name,
   return status;
 }
 
-bool JsonToProtobuf::convert_protobuf_to_json(const Message &proto_msg,
+bool jsontoprotobuf::convert_protobuf_to_json(const Message &proto_msg,
                                               string &json_string,
                                               string output_file_name = "") {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
@@ -79,4 +79,4 @@ bool JsonToProtobuf::convert_protobuf_to_json(const Message &proto_msg,
   return status;
 }
 
-} // namespace Thorup
+} // namespace thorup
