@@ -1,8 +1,6 @@
 #include "jsontoprotobuf.h"
 
-#include <boost/json.hpp>
 #include <boost/property_tree/json_parser.hpp>
-#include <boost/property_tree/ptree.hpp>
 
 #include <iostream>
 
@@ -14,7 +12,6 @@ using std::string;
 
 using namespace google::protobuf;
 using namespace boost::property_tree;
-using namespace boost::property_tree::json_parser;
 
 namespace thorup {
 

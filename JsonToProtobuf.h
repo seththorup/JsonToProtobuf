@@ -1,7 +1,4 @@
 #pragma once
-#include <string>
-
-#include <google/protobuf/message.h>
 #include <google/protobuf/util/json_util.h>
 
 namespace thorup {
